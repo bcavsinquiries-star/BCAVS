@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Artifact Detail | BCAVS</title>
+<meta name="description" content="Interactive 3D artifact viewer and detailed metadata from the BCAVS heritage archive.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,900;1,500;1,700&family=Poppins:wght@300;400;500;600;700&family=Cormorant+Garamond:ital@1&display=swap" rel="stylesheet">
+
+<!-- Three.js (classic UMD build) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+<link rel="stylesheet" href="../css/main.css">
+<link rel="stylesheet" href="../css/navbar.css">
+<link rel="stylesheet" href="../css/hero.css">
+<link rel="stylesheet" href="../css/viewer.css">
+<link rel="stylesheet" href="../css/artifacts.css">
+</head>
+<body data-route="artifact-detail">
+
+<nav class="navbar" id="navbar">
+  <div class="container navbar-inner">
+    <a href="../index.html" class="logo" aria-label="BCAVS Home">
+      <span class="logo-mark">B</span>
+      <span class="logo-text"><b>BCAVS</b><span>Heritage of Laguna · 3D</span></span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="../index.html" data-route="home">Home</a>
+      <a href="municipalities.html" data-route="municipalities">Municipalities</a>
+      <a href="gallery.html" data-route="gallery">Gallery</a>
+      <a href="about.html" data-route="about">About</a>
+      <a href="contact.html" data-route="contact">Contact</a>
+    </div>
+    <div class="nav-actions">
+      <a href="search.html" class="icon-btn" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3" stroke-linecap="round"/></svg>
+      </a>
+      <button class="hamburger icon-btn" aria-label="Open menu" onclick="toggleMobileMenu(true)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close icon-btn" aria-label="Close menu" onclick="toggleMobileMenu(false)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+  </button>
+  <a href="../index.html">Home</a>
+  <a href="municipalities.html">Municipalities</a>
+  <a href="gallery.html">Gallery</a>
+  <a href="search.html">Search</a>
+  <a href="about.html">About</a>
+  <a href="contact.html">Contact</a>
+</div>
+
+<div class="page-enter">
+  <div class="artifact-detail section-tight">
+    <div class="container">
+      <div class="breadcrumb"><a href="../index.html">Home</a> <span>/</span> <a href="gallery.html">Gallery</a> <span>/</span> <span id="artBreadcrumb">Artifact</span></div>
+
+      <div class="artifact-layout mt-24">
+        <!-- 3D VIEWER -->
+        <div>
+          <div class="viewer-shell">
+            <div class="viewer-topbar">
+              <div class="id-tag">Accession No. <b id="artAccession">LAG-PIL-014</b></div>
+              <div class="perf-badge"><span class="live-dot"></span><span id="fpsDisplay">Optimized · WebGL · 60fps</span></div>
+            </div>
+
+            <div class="viewer-canvas-wrap" id="mainCanvasWrap">
+              <div class="viewer-loading" id="viewerLoading"><div class="spinner"></div>Preparing 3D model…</div>
+              <div class="viewer-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M8 3H5a2 2 0 00-2 2v3M16 3h3a2 2 0 012 2v3M8 21H5a2 2 0 01-2-2v-3M16 21h3a2 2 0 002-2v-3"/></svg>
+                Drag to rotate · Scroll to zoom
+              </div>
+            </div>
+
+            <div class="viewer-toolbar" role="toolbar" aria-label="3D viewer controls">
+              <button class="tool-btn" data-tip="Rotate" id="btnRotateMode" onclick="toggleAutoRotate()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 11-3-6.7" stroke-linecap="round"/><path d="M21 3v6h-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <button class="tool-btn" data-tip="Zoom in" onclick="zoomViewer(-1)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M8 11h6" stroke-linecap="round"/></svg>
+              </button>
+              <button class="tool-btn" data-tip="Zoom out" onclick="zoomViewer(1)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M8 11h6" stroke-linecap="round"/></svg>
+              </button>
+              <div class="tool-divider"></div>
+              <button class="tool-btn" data-tip="Toggle lighting" onclick="cycleLighting()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 21h4M12 3a6 6 0 00-3.5 10.9c.5.4.8 1 .8 1.6v.5h5.4v-.5c0-.6.3-1.2.8-1.6A6 6 0 0012 3z"/></svg>
+              </button>
+              <button class="tool-btn" data-tip="Wireframe" id="btnWireframe" onclick="toggleWireframe()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l9 4 9-4-9 18-9-18z"/><path d="M3 3l9 18M21 3l-9 18M3 3h18"/></svg>
+              </button>
+              <div class="tool-divider"></div>
+              <button class="tool-btn" data-tip="Reset view" onclick="resetViewer()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 109-9" stroke-linecap="round"/><path d="M3 3v6h6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <button class="tool-btn" data-tip="Fullscreen" onclick="toggleFullscreen()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 00-2 2v3M16 3h3a2 2 0 012 2v3M8 21H5a2 2 0 01-2-2v-3M16 21h3a2 2 0 002-2v-3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </div>
+
+            <div class="vitrine-plaque">
+              <div>
+                <div class="plaque-title" id="artPlaqueTitle">Nuestra Señora de los Dolores de Turumba</div>
+                <div class="plaque-sub" id="artPlaqueSub">Fired clay · 18th century · Pakil, Laguna</div>
+              </div>
+              <div class="flex gap-8">
+                <button class="btn btn-outline btn-sm" onclick="alert('In production, this exports the current view as an image.')">Download View</button>
+                <button class="btn btn-primary btn-sm" onclick="alert('In production, this opens a true fullscreen immersive viewer.')">Immersive Mode</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- INFO RAIL -->
+        <div class="artifact-rail">
+          <span class="eyebrow kicker">Pottery &amp; Ceramics</span>
+          <h1 id="artTitle">Tapayan Burnay Jar</h1>
+          <div class="loc">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-6.6 7-12a7 7 0 10-14 0c0 5.4 7 12 7 12z"/><circle cx="12" cy="9" r="2.4"/></svg>
+            <span id="artLocation">Pakil, Laguna</span>
+          </div>
+          <p class="desc" id="artShortDesc">A large-mouthed burnay jar, hand-thrown from local clay and fired in a wood-burning kiln — once used to store rice wine and grain across Pakil's Spanish-era households.</p>
+
+          <div class="rail-actions">
+            <button class="btn btn-primary btn-sm" onclick="alert('Added to your saved collection.')">Save Artifact</button>
+            <button class="btn btn-outline btn-sm" onclick="alert('Share link copied.')">Share</button>
+          </div>
+
+          <div class="tabs" role="tablist">
+            <button class="tab-btn active" onclick="switchTab('desc',this)">Description</button>
+            <button class="tab-btn" onclick="switchTab('sig',this)">Historical Significance</button>
+            <button class="tab-btn" onclick="switchTab('meta',this)">Metadata</button>
+            <button class="tab-btn" onclick="switchTab('img',this)">Image Gallery</button>
+          </div>
+
+          <div class="tab-panel active" id="tab-desc">
+            <p id="artDescLong1">Loading description…</p>
+            <p id="artDescLong2"></p>
+          </div>
+          <div class="tab-panel" id="tab-sig">
+            <p id="artSig1"></p>
+            <p id="artSig2"></p>
+          </div>
+          <div class="tab-panel" id="tab-meta">
+            <table class="meta-table" id="artMetaTable"></table>
+          </div>
+          <div class="tab-panel" id="tab-img">
+            <div class="mini-gallery" id="artMiniGallery"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-40">
+        <div class="section-head" style="margin-bottom:24px;">
+          <span class="eyebrow">You May Also Like</span>
+          <h2 style="font-size:1.6rem;">Related Artifacts</h2>
+        </div>
+        <div class="related-scroller" id="relatedArtifacts"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer id="siteFooter">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="logo" style="margin-bottom:16px;">
+          <span class="logo-mark">B</span>
+          <span class="logo-text"><b style="color:var(--cream-2);">BCAVS</b><span style="color:rgba(252,249,242,.55);">Cultural Heritage of Baybay Laguna · 3D</span></span>
+        </div>
+        <p style="font-size:.86rem;max-width:280px;color:rgba(252,249,242,.62);">A web-based 3D visualization platform documenting the cultural heritage, landmarks, and artifacts of Baybay Laguna, Philippines.</p>
+        <div class="footer-social mt-16">
+          <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
+          <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+          <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="4"/><path d="M10 9l5 3-5 3z"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <h5>Explore</h5>
+        <ul>
+          <li><a href="municipalities.html">Municipalities</a></li>
+          <li><a href="gallery.html">Artifact Gallery</a></li>
+          <li><a href="search.html">Search</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>About</h5>
+        <ul>
+          <li><a href="about.html">The Project</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Stay Updated</h5>
+        <p style="font-size:.84rem;color:rgba(252,249,242,.62);">New artifacts, added yearly.</p>
+        <form class="newsletter" onsubmit="event.preventDefault(); alert('Subscribed!');">
+          <input type="email" placeholder="Your email" required>
+          <button type="submit">Join</button>
+        </form>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 BCAVS · A Cultural Heritage Thesis Project, Laguna, Philippines</span>
+      <span>React · Three.js · Node.js · Express · MySQL · Cloudflare Pages</span>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/municipalities.js"></script>
+<script src="../js/artifacts.js"></script>
+<script src="../js/scene.js"></script>
+<script src="../js/camera.js"></script>
+<script src="../js/lighting.js"></script>
+<script src="../js/models.js"></script>
+<script src="../js/controls.js"></script>
+<script src="../js/ui.js"></script>
+<script src="../js/router.js"></script>
+<script src="../js/main.js"></script>
+</body>
+</html>
