@@ -29,22 +29,64 @@ function initHeroViewer(){
   const wrap = document.getElementById('heroCanvasWrap');
   if(!wrap) return;
   const scene = createScene();
-  const camera = createCamera(wrap, {fov:38, position:[0, 1.1, 3.6]});
+  const camera = createCamera(wrap, {
+    fov:38,
+    position:[0, 0.8, 6]
+});
   const renderer = createRenderer(wrap);
 
   createHeroLightRig(scene);
 
-  const mesh = buildJarMesh(false, 0xB5652F);
-  mesh.position.y = -0.5;
-  scene.add(mesh);
+  const loader = new THREE.GLTFLoader();
+
+loader.load(
+  'public/models/Turumba.glb',
+  function(gltf){
+    const model = gltf.scene;
+
+// Rotate if needed
+//model.rotation.x = -Math.PI / 2;//
+
+// Measure the model
+const box = new THREE.Box3().setFromObject(model);
+const size = box.getSize(new THREE.Vector3());
+const center = box.getCenter(new THREE.Vector3());
+
+// Center the model
+model.position.sub(center);
+
+// Scale the model
+const maxDim = Math.max(size.x, size.y, size.z);
+const scale = 2 / maxDim;
+model.scale.setScalar(scale);
+
+// Recalculate after scaling
+const newBox = new THREE.Box3().setFromObject(model);
+const newCenter = newBox.getCenter(new THREE.Vector3());
+
+model.position.sub(newCenter);
+
+scene.add(model);
+  },
+  undefined,
+  function(error){
+    console.error('Error loading model:', error);
+  }
+);
   const pedestal = buildPedestal();
-  pedestal.position.y = -0.58;
+  pedestal.position.y = -1.1;
   scene.add(pedestal);
 
   const controls = createOrbitControls(camera, renderer.domElement, {
-    autoRotate:true, autoRotateSpeed:2.2, enableZoom:false, enablePan:false,
-    minPolarAngle: Math.PI/3.4, maxPolarAngle: Math.PI/1.9
-  });
+    autoRotate:false,
+    autoRotateSpeed:2.2,
+    enableZoom:true,
+    enablePan:true,
+    minDistance:1.5,
+    maxDistance:6,
+    minPolarAngle: Math.PI/6,
+    maxPolarAngle: Math.PI/1.7
+});
 
   (function animate(){
     requestAnimationFrame(animate);
@@ -59,6 +101,7 @@ function initHeroViewer(){
 function initMainViewer(){
   const wrap = document.getElementById('mainCanvasWrap');
   if(!wrap) return;
+
   const scene = createScene();
   const camera = createCamera(wrap, {fov:40, position:[0, 1.2, 4.2]});
   const renderer = createRenderer(wrap);
@@ -67,13 +110,18 @@ function initMainViewer(){
   const mesh = buildJarMesh(false, 0xB5652F);
   mesh.position.y = -0.35;
   scene.add(mesh);
+
   const pedestal = buildPedestal();
   pedestal.position.y = -0.43;
   scene.add(pedestal);
 
   const controls = createOrbitControls(camera, renderer.domElement, {
-    autoRotate:false, autoRotateSpeed:2.4, minDistance:2, maxDistance:7,
-    minPolarAngle: Math.PI/6, maxPolarAngle: Math.PI/1.7
+    autoRotate:false,
+    autoRotateSpeed:2.4,
+    minDistance:2,
+    maxDistance:7,
+    minPolarAngle: Math.PI/6,
+    maxPolarAngle: Math.PI/1.7
   });
 
   (function animate(){
@@ -85,8 +133,15 @@ function initMainViewer(){
   bindViewerResize(wrap, camera, renderer);
 
   window.__viewer = {
-    scene, camera, renderer, controls, mesh, pedestal, lights,
-    lightingIndex: 0, wireframeOn: false
+    scene,
+    camera,
+    renderer,
+    controls,
+    mesh,
+    pedestal,
+    lights,
+    lightingIndex: 0,
+    wireframeOn: false
   };
 }
 
