@@ -97,7 +97,6 @@ const ARTIFACTS = [
     condition: 'Preserved as a municipal historical landmark',
     accession: 'LAG-KAL-004'
   },
-  /*
   // ============================================================
   // PAETE
   // ============================================================
@@ -175,7 +174,6 @@ const ARTIFACTS = [
     condition: 'Fragmentary, stable',
     accession: 'LAG-NAG-005'
   },
-  */
 ];
 
 const ART_MAP = Object.fromEntries(ARTIFACTS.map(a => [a.id, a]));
@@ -213,7 +211,7 @@ function artifactCard(a, linkPrefix){
 function renderFeaturedArtifacts(containerId, count, linkPrefix){
   const wrap = document.getElementById(containerId);
   if(!wrap) return;
-  ARTIFACTS.slice(0, count || 4).forEach(a => wrap.appendChild(artifactCard(a, linkPrefix)));
+  ARTIFACTS.slice(0, count || ARTIFACTS.length).forEach(a => wrap.appendChild(artifactCard(a, linkPrefix)));
 }
 
 function switchTab(name, btn){
