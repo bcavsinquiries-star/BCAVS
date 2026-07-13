@@ -28,13 +28,22 @@
 .info-row span:first-child{color:var(--brown-soft);}
 .info-row span:last-child{color:var(--brown-dark);font-weight:600;}
 .map-placeholder{
-  aspect-ratio:16/10;border-radius:14px;margin-top:18px;
-  background:
-    linear-gradient(135deg, rgba(198,161,91,.18), rgba(198,161,91,.05)),
-    repeating-linear-gradient(0deg, rgba(74,50,24,.08) 0 1px, transparent 1px 24px),
-    repeating-linear-gradient(90deg, rgba(74,50,24,.08) 0 1px, transparent 1px 24px);
-  display:flex;align-items:center;justify-content:center;color:var(--brown-soft);font-size:.78rem;gap:8px;
+  aspect-ratio:16/10;
+  border-radius:14px;
+  margin-top:18px;
+  overflow:hidden;
   border:1px solid var(--gold-line);
+  position:relative;
+}
+
+.map-placeholder iframe{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100% !important;
+  height:100% !important;
+  border:0;
+  display:block;
 }
 
 .timeline{margin-top:20px;border-left:2px solid var(--gold-line);padding-left:26px;}
