@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Municipality | BCAVS</title>
+<meta name="description" content="Municipality profile and documented artifacts in the BCAVS heritage archive.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,900;1,500;1,700&family=Poppins:wght@300;400;500;600;700&family=Cormorant+Garamond:ital@1&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="../css/main.css">
+<link rel="stylesheet" href="../css/navbar.css">
+<link rel="stylesheet" href="../css/hero.css">
+<link rel="stylesheet" href="../css/viewer.css">
+<link rel="stylesheet" href="../css/artifacts.css">
+</head>
+<body data-route="municipality-detail">
+
+<nav class="navbar" id="navbar">
+  <div class="container navbar-inner">
+     <a href="index.html" class="logo" aria-label="BCAVS Home">
+    <img src="../public/logo.png" alt="BCAVS Logo" class="logo-img">
+    <span class="logo-text">
+      <b>BCAVS</b>
+      <span>Baybay Cultural Archive Visualization System · 3D</span>
+    </span>
+  </a>
+    <div class="nav-links" id="navLinks">
+      <a href="../index.html" data-route="home">Home</a>
+      <a href="municipalities.html" data-route="municipalities">Municipalities</a>
+      <a href="gallery.html" data-route="gallery">Gallery</a>
+      <a href="about.html" data-route="about">About</a>
+      <a href="contact.html" data-route="contact">Contact</a>
+    </div>
+    <div class="nav-actions">
+      <a href="search.html" class="icon-btn" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3" stroke-linecap="round"/></svg>
+      </a>
+      <button class="hamburger icon-btn" aria-label="Open menu" onclick="toggleMobileMenu(true)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close icon-btn" aria-label="Close menu" onclick="toggleMobileMenu(false)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+  </button>
+  <a href="../index.html">Home</a>
+  <a href="municipalities.html">Municipalities</a>
+  <a href="gallery.html">Gallery</a>
+  <a href="search.html">Search</a>
+  <a href="about.html">About</a>
+  <a href="contact.html">Contact</a>
+</div>
+
+<div class="page-enter">
+  <div class="muni-hero" id="muniHeroBanner">
+    <div class="tint"></div><div class="fade"></div>
+    <div class="container muni-hero-content">
+      <span class="eyebrow">Heritage Town</span>
+      <h1 id="muniName">Pakil</h1>
+      <div class="muni-hero-stats">
+        <div><b id="muniArtifactCount">1</b><span>Artifacts</span></div>
+        <div><b id="muniLandmarkCount">0</b><span>Landmarks</span></div>
+        <div><b id="muniFounded">1788</b><span>Founded</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="container two-col">
+      <div class="prose">
+        <span class="eyebrow">About this Town</span>
+        <h2 style="margin-top:10px;font-size:1.9rem;" id="muniLongName">Pakil, Laguna</h2>
+        <p id="muniDesc2"></p>
+        <h3>Historical Timeline</h3>
+        <div class="timeline" id="muniTimeline"></div>
+      </div>
+      <aside>
+        <div class="info-panel glass">
+          <h4>Municipality Profile</h4>
+          <div class="info-row"><span>Income Class</span><span id="muniIncome">5th-Class</span></div>
+          <div class="info-row"><span>Population</span><span id="muniPop">24,000 residents</span></div>
+          <div class="info-row"><span>Known For</span><span id="muniKnownFor">Religious Heritage</span></div>
+          <div class="info-row"><span>Language</span><span>Tagalog</span></div>
+          <div class="map-container">
+            <iframe
+            id  ="muniMap"
+            src=""
+            loding="lazy"
+            allowfullscreen
+            referrerpolicy="strict-origin-when-cross-origin">
+          </iframe>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <div class="section-tight" style="background:var(--beige);">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Documented Artifacts</span>
+        <h2>Relics of <span id="muniNameInline">this town</span></h2>
+      </div>
+      <div class="grid-4" id="muniArtifacts"></div>
+    </div>
+  </div>
+</div>
+
+<footer id="siteFooter">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="logo" style="margin-bottom:16px;">
+          <a href="index.html" class="logo" aria-label="BCAVS Home">
+          <img src="../public/logo.png" class="logo-img"></a>
+          <span class="logo-text"><b style="color:var(--cream-2);">BCAVS</b><span style="color:rgba(252,249,242,.55);">Cultural Heritage of Baybay Laguna · 3D</span></span>
+        </div>
+        <p style="font-size:.86rem;max-width:390px;color:rgba(252,249,242,.62);text-align:justify;">A web-based 3D visualization platform documenting the cultural heritage, landmarks, and artifacts of Baybay Laguna, Philippines.</p>
+        <div class="footer-social mt-16">
+          <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
+          <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+          <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="4"/><path d="M10 9l5 3-5 3z"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <h5>Explore</h5>
+        <ul>
+          <li><a href="municipalities.html">Municipalities</a></li>
+          <li><a href="gallery.html">Artifact Gallery</a></li>
+          <li><a href="search.html">Search</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>About</h5>
+        <ul>
+          <li><a href="about.html">The Project</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Stay Updated</h5>
+        <p style="font-size:.84rem;color:rgba(252,249,242,.62);">New artifacts, added yearly.</p>
+        <form class="newsletter" onsubmit="event.preventDefault(); alert('Subscribed!');">
+          <input type="email" placeholder="Your email" required>
+          <button type="submit">Join</button>
+        </form>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 BCAVS · A Cultural Heritage Thesis Project, Laguna, Philippines</span>
+      <span>React · Three.js · Node.js · Express · MySQL · Cloudflare Pages</span>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/municipalities.js"></script>
+<script src="../js/artifacts.js"></script>
+<script src="../js/ui.js"></script>
+<script src="../js/router.js"></script>
+<script src="../js/main.js"></script>
+</body>
+</html>
