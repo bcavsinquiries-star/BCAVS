@@ -1,0 +1,136 @@
+/* ============================================================
+   ANNOTATION / GUIDED-TOUR — hotspot markers + narration caption
+   Scoped entirely to elements this feature creates itself; does not
+   modify any existing viewer/toolbar rule.
+   ============================================================ */
+
+/* Hotspot circles are hidden by default and only "pop up" once the
+   person hovers their mouse over the 3D model — see the
+   .hotspots-visible toggle applied to #mainCanvasWrap in annotations.js.
+   The currently-active hotspot (mid-narration) always stays visible,
+   even if the mouse has moved off the model. */
+.hotspot-marker {
+  position: absolute;
+  transform: translate(-50%, -50%) scale(.45);
+  width: 30px; height: 30px;
+  display: flex; align-items: center; justify-content: center;
+  background: none; border: none; padding: 0; margin: 0;
+  cursor: pointer; z-index: 6;
+  opacity: 0;
+  pointer-events: none;
+  transition: transform .25s ease, opacity .25s ease;
+}
+.hotspots-visible .hotspot-marker {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, -50%) scale(1);
+}
+.hotspot-marker.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, -50%) scale(1);
+}
+.hotspot-marker:hover { transform: translate(-50%, -50%) scale(1.15); }
+
+.hotspot-dot {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(46, 29, 15, .78);
+  border: 2px solid var(--gold-bright);
+  box-shadow: 0 2px 10px rgba(43, 29, 15, .35);
+}
+.hotspot-dot::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px solid var(--gold-bright);
+  opacity: .55;
+  animation: hotspot-pulse 2.2s ease-out infinite;
+}
+.hotspot-marker.active .hotspot-dot {
+  background: var(--gold-deep);
+  border-color: var(--cream-2);
+}
+
+@keyframes hotspot-pulse {
+  0%   { transform: scale(.7); opacity: .6; }
+  70%  { transform: scale(1.5); opacity: 0; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+.hotspot-caption {
+  position: absolute;
+  left: 14px; right: 14px; bottom: 14px;
+  z-index: 7;
+  background: rgba(46, 29, 15, .88);
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--gold-line);
+  border-radius: 14px;
+  padding: 10px 70px;
+  box-shadow: var(--shadow-lg);
+  max-height:150px;
+  overflow-y:hidden;
+  opacity: 0; pointer-events: none;
+  transform: translateY(8px);
+  transition: opacity .25s ease, transform .25s ease;
+}
+.hotspot-caption.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+
+.hotspot-caption-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 10px; margin-bottom: 4px;
+}
+.hotspot-caption-label {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: .82rem;
+  letter-spacing: .3px;
+  color: var(--gold-bright);
+}
+.hotspot-caption-close {
+  background: none; border: none; cursor: pointer;
+  color: rgba(252, 249, 242, .65);
+  font-size: 1.1rem; line-height: 1;
+  padding: 2px 4px;
+}
+.hotspot-caption-close:hover { color: var(--cream-2); }
+
+.hotspot-caption-text {
+  max-height: 48px;
+  overflow-y: auto;
+  font-size: .78rem;
+  line-height: 1.5;
+  color: rgba(252, 249, 242, .92);
+}
+
+.hotspot-caption-controls {
+  display: flex; align-items: center; justify-content: center;
+  gap: 10px; margin-top: 10px; padding-top: 10px;
+  border-top: 1px solid rgba(198, 161, 91, .25);
+}
+.hs-ctrl {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(252, 249, 242, .08);
+  border: 1px solid var(--gold-line);
+  color: var(--cream-2);
+  cursor: pointer;
+  transition: background .2s ease, transform .2s ease;
+}
+.hs-ctrl svg { width: 15px; height: 15px; }
+.hs-ctrl:hover { background: rgba(252, 249, 242, .18); transform: translateY(-1px); }
+.hs-ctrl-primary {
+  width: 38px; height: 38px;
+  background: var(--gold-deep);
+  border-color: var(--gold-deep);
+  color: var(--brown-dark);
+}
+.hs-ctrl-primary svg { width: 16px; height: 16px; }
+.hs-ctrl-primary:hover { background: var(--gold-bright); }
+
+@media (max-width: 640px) {
+  .hotspot-marker { width: 26px; height: 26px; }
+  .hotspot-caption-text { font-size: .74rem; }
+}
