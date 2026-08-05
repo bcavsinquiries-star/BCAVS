@@ -1,0 +1,21 @@
+{
+  "name": "bcavs-vite",
+  "version": "1.0.0",
+  "description": "Baybay Cultural Artifact Visualization System — a web-based 3D visualization platform for the localized cultural heritage of Laguna, Philippines.",
+  "main": "index.js",
+  "scripts": {
+  "dev": "vite",
+  "build": "vite build",
+  "preview": "vite preview"
+},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "vite": "^8.2.0"
+  },
+  "dependencies": {
+    "three": "^0.185.1"
+  }
+}
